@@ -6,7 +6,7 @@ import com.amazon.speech.speechlet.interfaces.system.SystemInterface
 import com.amazon.speech.speechlet.interfaces.system.SystemState
 import com.amazon.speech.speechlet.services.DirectiveServiceClient
 
-class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceClient, val app: MyApplication) : SpeechletV2 {
+class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceClient, val app: Application) : SpeechletV2 {
 
     override fun onSessionEnded(requestEnvelope: SpeechletRequestEnvelope<SessionEndedRequest>?) {
     }
@@ -16,27 +16,44 @@ class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceC
      */
     override fun onIntent(requestEnvelope: SpeechletRequestEnvelope<IntentRequest>?): SpeechletResponse {
 
-        val returnValue : SpeechletResponse
+        val intent = requestEnvelope?.request?.intent ?: throw SpeechletException("Invalid intent")
+        val intentName = intent.name ?: throw SpeechletException("Invalid intent")
+
+        val slotValues = intent.slots
+                .map { Pair(it.key, it.value.value)}
+
+        return this.app.listOfActions()[intentName]?.invoke(slotValues)?.toSpeechlet()
+                ?: throw SpeechletException("Invalid intent")
+    }
+
+
+    override fun onLaunch(requestEnvelope: SpeechletRequestEnvelope<LaunchRequest>?): SpeechletResponse {
 
         if (this.app.getProperties().isAccountLinkingRequired) {
 
-            val accessToken : String? = getSystemState(requestEnvelope!!.context).user.accessToken
+            val accessToken : String? = getAccessToken(requestEnvelope)
 
             if (accessToken == null) {
-                returnValue = this.app.respondWithLinkCard()
+                this.app.respondWithLinkCard()?.let {
+                    return it.toSpeechlet()
+                }
             }
-
         }
-    }
 
-    override fun onLaunch(requestEnvelope: SpeechletRequestEnvelope<LaunchRequest>?): SpeechletResponse {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return this.app.respondWithWelcomeMessage().toAskSpeechlet()
     }
 
     override fun onSessionStarted(requestEnvelope: SpeechletRequestEnvelope<SessionStartedRequest>?) {
 
     }
 
+
+    /**
+     * Get the access token. May be null.
+     */
+    private fun getAccessToken(requestEnvelope: SpeechletRequestEnvelope<LaunchRequest>?) : String? {
+        return getSystemState(requestEnvelope!!.context).user.accessToken
+    }
 
     /**
      * Helper method that retrieves the system state from the request context.

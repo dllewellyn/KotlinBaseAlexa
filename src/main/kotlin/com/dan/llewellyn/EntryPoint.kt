@@ -8,8 +8,8 @@ import java.util.HashSet
 class Factory {
 
     companion object {
-        fun getApp() : MyApplication {
-            return MyApplicationDemo()
+        fun getApp() : Application {
+            return ApplicationDemo()
         }
     }
 
@@ -25,7 +25,7 @@ class EntryPoint : SpeechletRequestStreamHandler(ApplicationResponseSpeechlet(Di
         private val supportedApplicationIds = HashSet<String>()
 
         init {
-            supportedApplicationIds.add("<alexa skill id goes here>");
+            supportedApplicationIds.add(System.getenv("ALEXA_ID") ?: throw IllegalStateException("ALEXA_ID is required"));
         }
     }
 }
