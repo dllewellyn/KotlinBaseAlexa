@@ -27,16 +27,4 @@ data class Response(val outputSpeech: String,
                     val reprompt : String? = null)
 
 
-/**
- * Functions required to implement for the app
- */
-abstract class Application {
-
-    abstract fun getProperties() : AppProperties
-    abstract fun respondWithLinkCard(): AppLinkCard?
-    abstract fun respondWithWelcomeMessage(): AppWelcomeCard
-    abstract fun listOfActions() : Map<String, ((List<Pair<String, String>>) -> Response)>
-}
-
-
 

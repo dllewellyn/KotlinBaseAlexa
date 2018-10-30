@@ -5,6 +5,7 @@ import com.amazon.speech.speechlet.*
 import com.amazon.speech.speechlet.interfaces.system.SystemInterface
 import com.amazon.speech.speechlet.interfaces.system.SystemState
 import com.amazon.speech.speechlet.services.DirectiveServiceClient
+import com.dan.llewellyn.interfaces.Application
 
 class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceClient, val app: Application) : SpeechletV2 {
 
@@ -17,13 +18,13 @@ class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceC
     override fun onIntent(requestEnvelope: SpeechletRequestEnvelope<IntentRequest>?): SpeechletResponse {
 
         val intent = requestEnvelope?.request?.intent ?: throw SpeechletException("Invalid intent")
-        val intentName = intent.name ?: throw SpeechletException("Invalid intent")
+        val intentName = intent.name?.decapitalize() ?: throw SpeechletException("Invalid intent")
 
         val slotValues = intent.slots
                 .map { Pair(it.key, it.value.value)}
 
-        return this.app.listOfActions()[intentName]?.invoke(slotValues)?.toSpeechlet()
-                ?: throw SpeechletException("Invalid intent")
+        val intentAction = this.app.listOfActions()[intentName] ?: throw SpeechletException("Invalid intent")
+        return intentAction(slotValues).toSpeechlet()
     }
 
 

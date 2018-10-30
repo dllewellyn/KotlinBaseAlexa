@@ -1,10 +1,16 @@
 package com.dan.llewellyn
 
-class ApplicationDemo : Application() {
+import com.dan.llewellyn.interfaces.Application
+import com.dan.llewellyn.interfaces.IntentHandler
 
-    override fun listOfActions(): Map<String, (List<Pair<String, String>>) -> Response> =
-        mapOf(Pair("DemoIntent", { (slots) ->  Response(
-                "Demo intent", ResponseType.TELL_RESPONSE, true)}))
+class ApplicationDemo : Application {
+
+    override fun listOfActions(): Map<String, IntentHandler> =
+            mapOf("demointent" to { (slots) ->
+                    Response("Demo intent", ResponseType.TELL_RESPONSE, true)
+                })
+
+
 
 
     override fun respondWithLinkCard(): AppLinkCard? = null
