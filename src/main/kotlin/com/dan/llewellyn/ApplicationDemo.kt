@@ -1,14 +1,14 @@
 package com.dan.llewellyn
 
 import com.dan.llewellyn.interfaces.Application
-import com.dan.llewellyn.interfaces.IntentHandler
 
 class ApplicationDemo : Application {
 
-    override fun listOfActions(): Map<String, IntentHandler> =
-            mapOf("demointent" to { (slots) ->
-                    Response("Demo intent", ResponseType.TELL_RESPONSE, true)
-                })
+    override fun listOfActions(): Map<String, (List<Pair<String, String>>?) -> Response> =
+            mapOf("demointent" to {
+                    _ -> Response("Demo intent", ResponseType.TELL_RESPONSE, true)
+                }
+            )
 
 
 

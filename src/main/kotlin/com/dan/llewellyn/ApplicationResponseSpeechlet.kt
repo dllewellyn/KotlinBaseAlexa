@@ -18,12 +18,16 @@ class ApplicationResponseSpeechlet(val directiveServiceClient: DirectiveServiceC
     override fun onIntent(requestEnvelope: SpeechletRequestEnvelope<IntentRequest>?): SpeechletResponse {
 
         val intent = requestEnvelope?.request?.intent ?: throw SpeechletException("Invalid intent")
-        val intentName = intent.name?.decapitalize() ?: throw SpeechletException("Invalid intent")
+        val intentName = intent.name?.toLowerCase() ?: throw SpeechletException("Invalid intent")
 
         val slotValues = intent.slots
                 .map { Pair(it.key, it.value.value)}
 
-        val intentAction = this.app.listOfActions()[intentName] ?: throw SpeechletException("Invalid intent")
+        println("Intent name $intentName")
+        val intentAction = this.app.listOfActions()[intentName]
+                ?: throw SpeechletException("Invalid intent ($intentName) expected ${this.app.listOfActions().keys}")
+
+        print("Executing $intentAction")
         return intentAction(slotValues).toSpeechlet()
     }
 
