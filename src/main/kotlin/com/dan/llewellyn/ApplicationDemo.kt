@@ -29,9 +29,9 @@ class ApplicationDemo : AbstractApplication() {
 
     override fun respondWithLinkCard(): AppLinkCard? = null
 
-    override fun respondWithWelcomeMessage() : Response = response {
+    override fun respondToStart() : Response = response {
         speech = "Welcome to the demo application"
-        endSession = true
+        endSession = false
 
         card {
             text = "Welcome to the demo application"

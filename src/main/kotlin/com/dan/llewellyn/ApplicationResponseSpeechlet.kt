@@ -46,7 +46,7 @@
 //            }
 //        }
 //
-//        return this.app.respondWithWelcomeMessage().toSpeechlet()
+//        return this.app.respondToStart().toSpeechlet()
 //    }
 //
 //    override fun onSessionStarted(requestEnvelope: SpeechletRequestEnvelope<SessionStartedRequest>?) {

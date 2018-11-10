@@ -12,7 +12,7 @@ interface Application {
     fun getProperties() : AppProperties
     fun respondWithLinkCard(): AppLinkCard?
 
-    fun respondWithWelcomeMessage(): Response
+    fun respondToStart(): Response
     fun listOfActions() : Map<String, (Map<String, String>) -> Response>
     fun respondToEnd() : Response
     fun respondToHelp(): Response
