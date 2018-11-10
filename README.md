@@ -5,6 +5,12 @@
 Add the following to your gradle file
 
 ```
+repositories {
+    maven {
+            url  "https://dl.bintray.com/dllewellyn/kotlin-alexa-base" 
+        }
+}
+    
 dependencies {
     compile 'com.dan.llewellyn:KotlinBaseAlexa:0.1'
 }
