@@ -1,6 +1,5 @@
 package com.dan.llewellyn
 
-import com.dan.llewellyn.base.Resp
 import com.dan.llewellyn.base.card
 import com.dan.llewellyn.base.response
 import org.junit.Test
