@@ -6,7 +6,7 @@ Clone it.
 ```
 ./gradlew shadowJar
 
- aws lambda create-function --region eu-west-1 --function-name AlexaDemoSkill --zip-file "fileb://build/libs/KotlinBaseAlexa-1.0-SNAPSHOT-all.jar" --role arn:aws:iam::(your arn goes here):role/lambda_basic_execution --handler  com.dan.llewellyn.EntryPoint --runtime java8 --timeout 60 --memory-size 256
+ aws lambda create-function --region eu-west-1 --function-name AlexaDemoSkill --zip-file "fileb://build/libs/KotlinBaseAlexa-1.0-SNAPSHOT-all.jar" --role arn:aws:iam::(your arn goes here):role/lambda_basic_execution --handler  EntryPoint --runtime java8 --timeout 60 --memory-size 256
 ```
 
 To update in future
