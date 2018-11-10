@@ -24,7 +24,7 @@ plugins {
 }
 
 group 'com.dan.llewellyn'
-version '0.1'
+version '0.2'
 
 sourceCompatibility = 1.8
 
@@ -83,7 +83,7 @@ bintray {
         repo = 'kotlin-alexa-base'
         name = 'kotlin-alexa-base'
         version {
-            name = '0.1'
+            name = '0.2'
         }
     }
 }
@@ -94,7 +94,7 @@ publishing {
             from components.java
             groupId 'com.dan.llewellyn'
             artifactId 'KotlinBaseAlexa'
-            version '0.1'
+            version '0.2'
         }
     }
 }

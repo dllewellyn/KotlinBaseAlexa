@@ -92,23 +92,3 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
     }
 
 }
-
-class Factory {
-
-    companion object {
-        fun getApp() : ApplicationAdapter {
-            return ApplicationAdapter(ApplicationDemo())
-        }
-    }
-}
-
-class EntryPoint : SkillStreamHandler(getSkill()) {
-
-    companion object {
-        fun getSkill() =
-            Skills.standard()
-                    .addRequestHandlers(Factory.getApp())
-                    .withSkillId(System.getenv("ALEXA_ID"))
-                    .build()
-    }
-}
