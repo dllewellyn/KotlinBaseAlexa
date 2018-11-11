@@ -43,6 +43,11 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
 
     override fun handle(input: HandlerInput?): Optional<Response> {
 
+        input?.requestEnvelope?.session?.sessionId?.let {
+            sessionId ->
+                this.application.setSessionId(sessionId)
+        }
+
         val slotValues =
             if (input?.request is IntentRequest &&
                     (input.request as IntentRequest).intent.slots != null ) {
@@ -73,6 +78,8 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
                 }
             }
         }
+
+
 
         val intentName = getIntent(input)
 
