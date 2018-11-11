@@ -4,4 +4,4 @@ phases:
   build:
     commands:
       - echo Entered the install phase...
-      - ./gradlew shadowBuild
+      - ./gradlew build
