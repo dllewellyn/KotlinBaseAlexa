@@ -23,4 +23,7 @@ interface Application {
     fun userId() : String
     fun setUserId(userId : String)
 
+    fun getAttributes() : Map<String, Any>
+    fun updateAttributes(attributes : Map<String, Any>)
+
 }

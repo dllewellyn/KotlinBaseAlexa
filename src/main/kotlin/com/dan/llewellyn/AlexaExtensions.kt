@@ -1,26 +1,51 @@
 package com.dan.llewellyn
 
 import com.amazon.ask.model.Response
-import com.amazon.ask.response.ResponseBuilder
-import java.util.*
+import com.amazon.ask.model.dialog.ElicitSlotDirective
+import com.amazon.ask.model.ui.PlainTextOutputSpeech
+import com.amazon.ask.model.ui.Reprompt
+import com.amazon.ask.model.ui.SimpleCard
 
 
-fun com.dan.llewellyn.base.Response.toSpeechlet(builder : ResponseBuilder): Optional<Response> {
-    var temp = builder
+fun com.dan.llewellyn.base.Response.toSpeechlet(): Response {
+    var temp = Response.builder()
 
     if (this.reprompt != null) {
-        temp = temp.withReprompt(this.reprompt)
+        temp = temp.withReprompt(Reprompt.builder()
+                .withOutputSpeech(PlainTextOutputSpeech.builder()
+                        .withText(this.reprompt)
+                        .build())
+                .build())
     }
 
     this.card?.let {
         card ->
-            temp = temp.withSimpleCard(card.title, card.text)
+            temp = temp.withCard(
+                    SimpleCard.builder().withTitle(card.title)
+                            .withContent(card.text)
+                            .build()
+            )
     }
 
-    temp = temp.withSpeech(this.speech)
+    temp = temp.withOutputSpeech(
+            PlainTextOutputSpeech.builder().withText(this.speech).build())
                 .withShouldEndSession(this.endSession)
 
-    return temp.build()
+    this.directives?.let {
+        directives ->
+            directives.forEach {
+
+                temp = temp.addDirectivesItem(
+                        ElicitSlotDirective.builder()
+                                .withSlotToElicit(it.slotToElicit)
+                                .build()
+                )
+            }
+    }
+
+    val t = temp.build()
+    println(t.directives)
+    return t
 }
 
 
