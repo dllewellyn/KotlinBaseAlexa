@@ -12,15 +12,16 @@ import java.util.*
 import com.amazon.ask.model.dialog.DelegateDirective
 import com.amazon.ask.model.interfaces.display.BodyTemplate3
 import com.amazon.ask.model.interfaces.display.DisplayInterface
+import com.amazon.ask.model.interfaces.display.RenderTemplateDirective
 import java.lang.Exception
 
 
 class ApplicationAdapter(val application : Application) : RequestHandler {
 
-    val HELP_INTENT = "amazon.helpintent"
+    val HELP_INTENT = "AMAZON.HelpIntent"
     val LAUNCH_INTENT = "amazon.launchintent"
-    val CANCEL_INTENT = "amazon.cancelintent"
-    val STOP_INTENT = "amazon.stopintent"
+    val CANCEL_INTENT = "AMAZON.CancelIntent"
+    val STOP_INTENT = "AMAZON.StopIntent"
 
     val buildInIntents = listOf(HELP_INTENT, LAUNCH_INTENT, CANCEL_INTENT, STOP_INTENT)
 
@@ -31,6 +32,8 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
             request.intent.name
         } else if (request is LaunchRequest) {
             "amazon.launchintent"
+        } else if (request is SessionEndedRequest) {
+            STOP_INTENT
         } else {
             ""
         }
@@ -39,7 +42,6 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
     override fun canHandle(input: HandlerInput?): Boolean {
         val retVal = this.application.listOfActions().containsKey(getIntent(input)) ||
                 this.buildInIntents.contains(getIntent(input))
-        println("${this.application.listOfActions().keys} (can handle - ${getIntent(input)}) $retVal")
         return retVal
     }
 
@@ -93,7 +95,7 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
 
         val slotValues = getSlotValues(input)
 
-        //input?.requestEnvelope?.context?.system?.device?.supportedInterfaces?.
+
         input?.attributesManager?.let {
             setAttributes(it)
         }
@@ -122,6 +124,10 @@ class ApplicationAdapter(val application : Application) : RequestHandler {
                 vals ->
                 input?.attributesManager?.sessionAttributes?.put(vals.key, vals.value)
                     println("Values $vals")
+            }
+
+            input?.requestEnvelope?.context?.system?.device?.supportedInterfaces?.display?.let {
+                return Optional.of(resp.toSpeechlet(true))
             }
 
             Optional.of(resp.toSpeechlet())

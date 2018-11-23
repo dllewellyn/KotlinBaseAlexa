@@ -9,9 +9,7 @@ class ResponseBuilderTest {
     @Test
     fun testBuildingAResponseWithResponseBuilderBlocks() {
 
-        response {
-            speech = "Test speech"
-
+        response (speech = "Test speech") {
             card = card {
                 title = "The title"
                 text = "the text"
