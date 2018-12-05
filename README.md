@@ -5,14 +5,47 @@
 Add the following to your gradle file
 
 ```
-repositories {
-    maven {
-            url  "https://dl.bintray.com/dllewellyn/kotlin-alexa-base" 
-        }
+buildscript {
+
+    ext.kotlin_version = '1.3.0'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:4.0.2"
+    }
 }
-    
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.0'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version '1.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url  "https://dl.bintray.com/dllewellyn/kotlin-alexa-base"
+    }
+}
+
 dependencies {
-    compile 'com.dan.llewellyn:KotlinBaseAlexa:0.1'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation 'com.dan.llewellyn:KotlinBaseAlexa:0.9'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
 }
 ```
 
